@@ -82,11 +82,26 @@ async def chat_endpoint(request: ChatRequest):
     messages.extend(formatted_history[:-1]) # past history
     messages.append({"role": "user", "content": request.message})
 
-    # 5. Call LLM Engine (OpenAI API / GLM-4 fallback)
+    # 5. Call LLM Engine (Gemini API or OpenAI API)
+    gemini_api_key = os.getenv("GEMINI_API_KEY")
     openai_api_key = os.getenv("OPENAI_API_KEY")
     ai_response_text = ""
 
-    if openai_api_key and openai_api_key != "your_openai_api_key_here":
+    # Try Gemini API first if configured
+    if gemini_api_key and gemini_api_key != "your_gemini_api_key_here":
+        try:
+            import google.generativeai as genai
+            genai.configure(api_key=gemini_api_key)
+            model = genai.GenerativeModel("gemini-1.5-flash")
+            full_prompt = f"{DNYANX_SYSTEM_PROMPT}\n\n### Context from DnyanX Tech Knowledge Base:\n{context_text}\n\nUser Question: {request.message}"
+            res = model.generate_content(full_prompt)
+            if res and res.text:
+                ai_response_text = res.text
+        except Exception as e:
+            logger.error(f"Gemini API call failed: {e}")
+
+    # Fallback to OpenAI API if Gemini not used or failed
+    if not ai_response_text and openai_api_key and openai_api_key != "your_openai_api_key_here":
         try:
             from openai import OpenAI
             client = OpenAI(api_key=openai_api_key)
@@ -99,7 +114,6 @@ async def chat_endpoint(request: ChatRequest):
             ai_response_text = llm_res.choices[0].message.content
         except Exception as e:
             logger.error(f"OpenAI completion call failed: {e}")
-            ai_response_text = None
 
     if not ai_response_text:
         # Fallback offline responder with context awareness for demonstration & local testing
@@ -118,6 +132,7 @@ async def chat_endpoint(request: ChatRequest):
                 "• **Our Philosophy**: *Value = Pain × People × Frequency* & *Sell the hole, not the drill machine*.\n\n"
                 "How can DnyanX Tech assist your project today?"
             )
+
 
     # 6. Save assistant response to DB/memory
     store_chat_message(request.session_id, "assistant", ai_response_text)
