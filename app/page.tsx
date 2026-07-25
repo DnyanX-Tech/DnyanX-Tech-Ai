@@ -1,93 +1,97 @@
+import React from 'react';
+import { BotMessageSquare, User, CornerDownLeft, Maximize2, ShieldCheck, Sparkles } from 'lucide-react';
 import Link from 'next/link';
-import { MessageSquare, ShieldCheck, Sparkles, ArrowRight, Zap, Database, Brain } from 'lucide-react';
 
 export default function Home() {
+  const messages = [
+    { sender: 'You', text: 'नमस्कार ज्ञानX! हे डिझाईन कडक दिसतय!', bold: true },
+    { sender: 'AI', text: "शुभ प्रभात! मी तुमच्या 'Custom AI Agent' (DnyanX AI) साठी तयार आहे. RAG & Vector Search द्वारे मी तुमच्या सर्व प्रश्नांची अचूक उत्तरे देऊ शकतो. काय सुरुवात करायची?" }
+  ];
+
   return (
-    <div className="min-h-screen flex flex-col justify-between p-6 sm:p-12 relative overflow-hidden">
-      {/* Background glow accents */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#00FF66]/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#FFD700]/10 rounded-full blur-3xl pointer-events-none"></div>
+    <main className="min-h-screen bg-slate-950 text-slate-100 p-6 flex flex-col font-sans relative overflow-hidden">
+      
+      {/* Background Static Ambient Glows - (Performant Version) */}
+      <div className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/20 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="absolute bottom-0 right-0 translate-x-1/2 translate-y-1/2 w-[500px] h-[500px] bg-yellow-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+      
+      {/* Subtle Dot Grid Texture */}
+      <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>
 
-      {/* Header Navigation */}
-      <header className="flex justify-between items-center max-w-6xl mx-auto w-full z-10">
+      {/* Header */}
+      <header className="relative z-10 flex items-center justify-between pb-6 border-b border-slate-800">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#00FF66]/20 to-[#FFD700]/20 border border-[#00FF66]/50 flex items-center justify-center font-bold text-xl text-[#00FF66]">
-            X
+          <div className="w-10 h-10 bg-slate-900 border border-emerald-500/30 rounded-xl flex items-center justify-center font-bold text-emerald-400 shadow-neon-green">
+            DX
           </div>
-          <span className="font-black text-xl text-white tracking-wide">
-            DnyanX <span className="text-[#00FF66]">AI</span>
-          </span>
+          <h1 className="text-xl font-semibold text-slate-200">
+            Dnyan<span className="text-yellow-400">X</span> AI <span className="text-slate-400 text-sm font-normal">Assistant</span>
+          </h1>
         </div>
-
-        <div className="flex gap-4">
-          <Link
-            href="/chat"
-            className="px-4 py-2 rounded-xl bg-[#00FF66]/10 text-[#00FF66] border border-[#00FF66]/30 font-semibold text-sm hover:bg-[#00FF66]/20 transition"
-          >
-            Open Chat
-          </Link>
+        <div className="flex items-center gap-3">
           <Link
             href="/admin"
-            className="px-4 py-2 rounded-xl bg-slate-800 text-slate-200 border border-slate-700 font-semibold text-sm hover:bg-slate-700 transition"
+            className="text-xs text-slate-400 hover:text-slate-200 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900/60 border border-slate-800 transition"
           >
-            Admin Dashboard
+            <ShieldCheck size={16} className="text-yellow-400" /> Admin Panel
+          </Link>
+          <Link
+            href="/chat"
+            className="text-xs text-slate-950 font-bold bg-emerald-400 hover:bg-emerald-300 px-3.5 py-1.5 rounded-lg transition flex items-center gap-1.5"
+          >
+            <Sparkles size={14} /> Live Chat
           </Link>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <main className="max-w-4xl mx-auto text-center my-auto z-10 py-12">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-panel text-xs font-semibold text-[#FFD700] mb-6 border border-[#FFD700]/30">
-          <Sparkles className="w-3.5 h-3.5" /> Next-Gen Agency AI Assistant
-        </div>
+      {/* Chat Area - Minimalist/DeepSeek Style */}
+      <div className="relative z-10 flex-grow flex flex-col gap-6 py-8 overflow-y-auto max-w-5xl w-full mx-auto">
+        {messages.map((msg, index) => (
+          <div key={index} className={`flex gap-4 items-start ${msg.sender === 'You' ? 'justify-end' : ''}`}>
+            {msg.sender === 'AI' && (
+              <div className="w-9 h-9 mt-1 rounded-full bg-slate-900 border border-emerald-500/40 flex items-center justify-center shrink-0">
+                <BotMessageSquare className="text-emerald-500" size={18} />
+              </div>
+            )}
+            
+            <div className={`relative px-6 py-4 rounded-3xl ${
+              msg.sender === 'You' 
+                ? 'bg-slate-900/60 border border-slate-700/50 backdrop-blur-md text-slate-200' 
+                : 'bg-slate-800/30 text-slate-300 border border-yellow-500/20'
+            }`}>
+              {msg.bold ? (
+                <p className="font-medium text-slate-100">{msg.text}</p>
+              ) : (
+                <p className="leading-relaxed">{msg.text}</p>
+              )}
+            </div>
 
-        <h1 className="text-4xl sm:text-6xl font-black text-white leading-tight mb-6">
-          Meet <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00FF66] to-[#FFD700]">DnyanX AI</span> — Your Intelligent Business Co-Pilot
-        </h1>
-
-        <p className="text-lg text-slate-300 max-w-2xl mx-auto mb-8 leading-relaxed">
-          Powered by Next.js 14, FastAPI, RAG, and pgvector embeddings. Answers client queries, estimates quotes, and delivers brand-aligned advice in English & Marathi.
-        </p>
-
-        <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <Link
-            href="/chat"
-            className="px-8 py-4 rounded-xl bg-gradient-to-r from-[#00FF66] to-[#00CC52] text-slate-950 font-bold text-base flex items-center justify-center gap-2 hover:shadow-neon-green transition transform hover:-translate-y-0.5"
-          >
-            <MessageSquare className="w-5 h-5" /> Start Chatting Now <ArrowRight className="w-5 h-5" />
-          </Link>
-          <Link
-            href="/admin"
-            className="px-8 py-4 rounded-xl glass-panel text-slate-200 font-bold text-base flex items-center justify-center gap-2 border border-slate-700 hover:border-[#FFD700]/50 transition"
-          >
-            <ShieldCheck className="w-5 h-5 text-[#FFD700]" /> Knowledge Base Admin
-          </Link>
-        </div>
-
-        {/* Feature Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-16 text-left">
-          <div className="glass-panel p-6 rounded-2xl border border-slate-800">
-            <Zap className="w-8 h-8 text-[#00FF66] mb-3" />
-            <h3 className="font-bold text-white text-lg mb-1">Instant Quotes & RAG</h3>
-            <p className="text-xs text-slate-400">Contextual answers pulled directly from DnyanX Tech documentation.</p>
+            {msg.sender === 'You' && (
+              <div className="w-9 h-9 mt-1 rounded-full bg-emerald-950 border border-emerald-500 flex items-center justify-center shrink-0">
+                <User className="text-emerald-300" size={18} />
+              </div>
+            )}
           </div>
-          <div className="glass-panel p-6 rounded-2xl border border-slate-800">
-            <Brain className="w-8 h-8 text-[#FFD700] mb-3" />
-            <h3 className="font-bold text-white text-lg mb-1">Brand Voice Embed</h3>
-            <p className="text-xs text-slate-400">Incorporates value equations and agency philosophies seamlessly.</p>
-          </div>
-          <div className="glass-panel p-6 rounded-2xl border border-slate-800">
-            <Database className="w-8 h-8 text-[#00FF66] mb-3" />
-            <h3 className="font-bold text-white text-lg mb-1">pgvector Memory</h3>
-            <p className="text-xs text-slate-400">Supabase pgvector search & persistent conversation memory.</p>
-          </div>
-        </div>
-      </main>
+        ))}
+      </div>
 
-      {/* Footer */}
-      <footer className="text-center text-xs text-slate-500 z-10">
-        Built with ❤️ by <span className="text-[#FFD700] font-semibold">DnyanX Tech</span>
+      {/* Input Area - Cyber-Glassmorphism */}
+      <footer className="relative z-10 w-full max-w-5xl mx-auto pb-6">
+        <Link href="/chat">
+          <div className="relative bg-slate-900/40 border border-emerald-500/20 backdrop-blur-xl rounded-2xl p-2 flex items-center gap-2 group hover:border-emerald-500/40 transition duration-300 cursor-pointer">
+            <input 
+              type="text" 
+              placeholder="AI शी बोला... (Click to launch live RAG chat)" 
+              readOnly
+              className="flex-grow bg-transparent px-4 py-3 text-slate-100 placeholder:text-slate-500 focus:outline-none cursor-pointer"
+            />
+            <button className="bg-emerald-600 hover:bg-emerald-500 text-slate-950 px-5 py-3 rounded-xl transition flex items-center gap-2 font-semibold text-sm">
+              <span>Send</span>
+              <CornerDownLeft size={16} />
+            </button>
+          </div>
+        </Link>
       </footer>
-    </div>
+    </main>
   );
 }
