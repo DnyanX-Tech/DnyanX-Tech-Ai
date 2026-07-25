@@ -10,12 +10,40 @@
 body {
   color: var(--foreground);
   background-color: #020617;
-  background-image: radial-gradient(#1e293b 1px, transparent 1px);
-  background-size: 20px 20px;
   min-height: 100vh;
   font-family: 'Inter', sans-serif;
 }
 
+/* Background Grid Pattern with Glow */
+.bg-grid {
+  background-image: 
+    linear-gradient(rgba(0, 255, 102, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 102, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Live Animated Floating Glowing Orbs */
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+}
+
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.35;
+  animation: float 20s infinite ease-in-out;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.orb-1 { width: 600px; height: 600px; background: #00FF66; top: -10%; left: -10%; animation-delay: 0s; }
+.orb-2 { width: 500px; height: 500px; background: #FFD700; bottom: -10%; right: -10%; animation-delay: -7s; }
+.orb-3 { width: 400px; height: 400px; background: #22D3EE; top: 40%; left: 45%; animation-delay: -14s; }
+
+/* Glassmorphism Panels & Bubbles */
 .glass-panel {
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(24px);
@@ -40,7 +68,13 @@ body {
   box-shadow: 0 0 20px rgba(255, 215, 0, 0.15);
 }
 
-/* Custom scrollbar */
+/* Mobile Responsive Tweaks */
+@media (max-width: 640px) {
+  .orb { opacity: 0.2; filter: blur(80px); }
+  .max-w-\[80\%\] { max-width: 92%; }
+}
+
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -54,4 +88,3 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #00FF66;
 }
-
