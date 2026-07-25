@@ -90,13 +90,33 @@ async def chat_endpoint(request: ChatRequest):
     # Try Gemini API first if configured
     if gemini_api_key and gemini_api_key != "your_gemini_api_key_here":
         try:
-            import google.generativeai as genai
-            genai.configure(api_key=gemini_api_key)
-            model = genai.GenerativeModel("gemini-1.5-flash")
+            import urllib.request
+            import json
+
+            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={gemini_api_key}"
             full_prompt = f"{DNYANX_SYSTEM_PROMPT}\n\n### Context from DnyanX Tech Knowledge Base:\n{context_text}\n\nUser Question: {request.message}"
-            res = model.generate_content(full_prompt)
-            if res and res.text:
-                ai_response_text = res.text
+            
+            payload = {
+                "contents": [
+                    {
+                        "parts": [
+                            {"text": full_prompt}
+                        ]
+                    }
+                ]
+            }
+
+            req = urllib.request.Request(
+                url,
+                data=json.dumps(payload).encode('utf-8'),
+                headers={'Content-Type': 'application/json'}
+            )
+
+            with urllib.request.urlopen(req) as resp:
+                result = json.loads(resp.read().decode('utf-8'))
+                if "candidates" in result and len(result["candidates"]) > 0:
+                    parts = result["candidates"][0]["content"]["parts"]
+                    ai_response_text = "".join([p["text"] for p in parts if "text" in p])
         except Exception as e:
             logger.error(f"Gemini API call failed: {e}")
 
@@ -114,6 +134,7 @@ async def chat_endpoint(request: ChatRequest):
             ai_response_text = llm_res.choices[0].message.content
         except Exception as e:
             logger.error(f"OpenAI completion call failed: {e}")
+
 
     if not ai_response_text:
         # Fallback offline responder with context awareness for demonstration & local testing
