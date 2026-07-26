@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { MessageSquare, PlusCircle, ShieldCheck, ExternalLink, Cpu } from 'lucide-react';
+import UserMenu from '@/components/UserMenu';
 
 interface SidebarProps {
   currentSessionId: string;
@@ -14,15 +15,17 @@ export default function Sidebar({ currentSessionId, onNewChat }: SidebarProps) {
     <aside className="w-full md:w-64 glass-panel border-r border-slate-800 p-4 flex flex-col justify-between shrink-0">
       <div>
         {/* Brand Header */}
-        <div className="flex items-center gap-3 mb-6 p-2 rounded-xl bg-slate-900/50 border border-slate-800">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#00FF66]/20 to-[#FFD700]/20 border border-[#00FF66]/50 flex items-center justify-center font-bold text-xl text-[#00FF66]">
-            X
-          </div>
-          <div>
-            <h1 className="font-extrabold text-lg text-white tracking-wide flex items-center gap-1.5">
-              DnyanX <span className="text-[#00FF66]">AI</span>
-            </h1>
-            <p className="text-[11px] text-slate-400 font-medium">DnyanX Tech Assistant</p>
+        <div className="flex items-center justify-between mb-6 p-2 rounded-xl bg-slate-900/50 border border-slate-800">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#00FF66]/20 to-[#FFD700]/20 border border-[#00FF66]/50 flex items-center justify-center font-bold text-xl text-[#00FF66]">
+              X
+            </div>
+            <div>
+              <h1 className="font-extrabold text-lg text-white tracking-wide flex items-center gap-1.5">
+                DnyanX <span className="text-[#00FF66]">AI</span>
+              </h1>
+              <p className="text-[11px] text-slate-400 font-medium">DnyanX Tech Assistant</p>
+            </div>
           </div>
         </div>
 
@@ -52,12 +55,15 @@ export default function Sidebar({ currentSessionId, onNewChat }: SidebarProps) {
         </div>
       </div>
 
-      {/* Footer Branding */}
-      <div className="pt-4 border-t border-slate-800/80 text-center">
+      {/* Account & Footer Branding */}
+      <div className="pt-4 border-t border-slate-800/80 space-y-3">
+        <div className="flex justify-center">
+          <UserMenu />
+        </div>
         <div className="flex items-center justify-center gap-1.5 text-xs text-slate-400">
           <Cpu className="w-3.5 h-3.5 text-[#00FF66]" /> Powered by RAG & OpenAI
         </div>
-        <p className="text-[11px] text-slate-500 mt-2">
+        <p className="text-[11px] text-center text-slate-500">
           Built with ❤️ by <span className="text-[#FFD700] font-semibold">DnyanX Tech</span>
         </p>
       </div>

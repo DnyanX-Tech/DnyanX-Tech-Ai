@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import Particles from '@/components/Particles';
+import AuthProvider from '@/components/AuthProvider';
 
 export const metadata: Metadata = {
   title: 'DnyanX AI | Branded AI Assistant',
@@ -23,7 +24,9 @@ export default function RootLayout({
         {/* Particle Canvas */}
         <Particles />
 
-        <div className="relative z-10">{children}</div>
+        <AuthProvider>
+          <div className="relative z-10">{children}</div>
+        </AuthProvider>
       </body>
     </html>
   );
